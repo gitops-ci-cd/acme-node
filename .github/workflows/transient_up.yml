@@ -21,8 +21,6 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            console.log("PAYLOAD");
-            console.log(context.payload);
             const response = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
