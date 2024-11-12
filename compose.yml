@@ -56,19 +56,19 @@ services:
 
   install:
     <<: *npm
-    command: install
+    command: install --include=dev
 
   lint:
     <<: *npx
     command: eslint
-    volumes:
-      - .:/usr/src/app:delegated
+    depends_on:
+      - install
 
   test:
     <<: *npm
     command: run test
-    volumes:
-      - .:/usr/src/app:delegated
+    depends_on:
+      - install
 
 volumes:
   node_modules: {}
