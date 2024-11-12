@@ -21,12 +21,13 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            console.log("CONTEXT");
-            console.log(context);
+            console.log("PAYLOAD");
+            console.log(context.payload);
             const response = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.payload.pull_request.head.ref,
+              required_contexts: [],
               environment: 'ephemeral',
               description: 'Spinning up ephemeral environment',
               transient_environment: true,
