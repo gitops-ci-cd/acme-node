@@ -1,17 +1,50 @@
 name: Release Workflow
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
 
 jobs:
-  update_image_sha_and_deploy:
-    # Run only if NOT a pre-release
-    if: ${{ github.event.release.prerelease == false }}
-    name: Update Image SHA and Deploy
+  image:
+    name: Build and push Docker image
+    uses: dudo/.github/.github/workflows/docker_image.yml@main
+  release:
+    name: Tag repo and trigger GitHub Deployment
     runs-on: ubuntu-latest
 
     steps:
+      - name: Detect Version
+        id: version
+        run: |
+          # Check for each language's version file and extract the version
+          if [ -f "package.json" ]; then
+            VERSION=$(jq -r .version package.json)
+          elif [ -f "go.mod" ]; then
+            VERSION=$(grep -E '^module' go.mod | awk '{print $2}')
+          elif [ -f "setup.py" ]; then
+            VERSION=$(grep -E 'version=' setup.py | sed "s/.*version=['\"]\([^'\"]*\)['\"].*/\1/")
+          elif [ -f "Gemfile.lock" ]; then
+            VERSION=$(grep -E '^[ ]{4}VERSION' Gemfile.lock | awk '{print $2}')
+          elif [ -f "pom.xml" ]; then
+            VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
+          elif [ -f "*.csproj" ]; then
+            VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" *.csproj)
+          else
+            echo "Error: No version file detected."
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Tag the version using GitHub CLI
+        if: success() && steps.version.outputs.version != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth login --with-token <<< "${GITHUB_TOKEN}"
+          gh release create "v${{ env.version }}" --title "Version ${{ env.version }}" --notes "Release version ${{ env.version }}" --target ${{ github.sha }}
+
       - name: Trigger GitHub Deployment
         uses: actions/github-script@v7
         with:
@@ -32,6 +65,6 @@ jobs:
               repo: context.repo.repo,
               deployment_id: response.data.id,
               state: 'success',
-              environment_url: `https://acme.inc`,
+              environment_url: `https://www.acme.inc`,
               description: 'Production environment deployed successfully!',
             });
