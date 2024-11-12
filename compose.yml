@@ -61,10 +61,14 @@ services:
   lint:
     <<: *npx
     command: eslint
+    volumes:
+      - .:/usr/src/app:delegated
 
   test:
     <<: *npm
     command: run test
+    volumes:
+      - .:/usr/src/app:delegated
 
 volumes:
   node_modules: {}
