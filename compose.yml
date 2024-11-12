@@ -65,8 +65,8 @@ services:
       - install
 
   test:
-    <<: *npm
-    command: run test
+    <<: *npx
+    command: mocha
     depends_on:
       - install
 
