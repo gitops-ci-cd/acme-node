@@ -37,8 +37,10 @@ This project leverages GitOps principles, where:
 
 Our development model follows trunk-based development for efficient collaboration and continuous integration:
 
-- Small, Frequent Merges: Changes should be small and integrated into main regularly to reduce merge conflicts.
-- Short-Lived Branches: Branches are kept short-lived, aiming for frequent merges to maintain a continuously deployable state.
+- Small, Frequent Merges
+  - Changes should be small and integrated into main regularly to reduce merge conflicts.
+- Short-Lived Branches
+  - Branches are kept short-lived, aiming for frequent merges to maintain a continuously deployable state.
 
 ## Setup & Local Development
 
