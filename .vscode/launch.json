@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "test",
+      "type": "node",
+      "request": "attach",
+      "restart": true,
+      "port": 9229,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/usr/src/app",
+      "preLaunchTask": "run-docker-compose-test",
+    }
+  ]
+}

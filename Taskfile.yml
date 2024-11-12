@@ -23,12 +23,12 @@ tasks:
   lint:
     desc: "Run linting"
     cmds:
-      - docker compose run --rm npm run lint
+      - docker compose run --rm lint
 
   test:
     desc: "Run unit tests"
     cmds:
-      - docker compose run --rm npm run test
+      - docker compose run --rm test
 
   build:
     desc: "Build the Docker image(s)"

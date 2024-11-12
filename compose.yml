@@ -14,7 +14,7 @@ services:
       - .:/usr/src/app:delegated
       - node_modules:/node_modules:cached
 
-  npx:
+  npx: &npx
     <<: *npm
     entrypoint: npx
     command: -h
@@ -24,7 +24,7 @@ services:
     entrypoint: node
     command: -h
 
-  # We can't use <<: *npm with watch due to the volume overlap.
+  # We can't use <<: *npm with develop.watch due to the volume overlap.
   app:
     env_file:
       - path: .env
@@ -37,7 +37,7 @@ services:
     entrypoint: npm
     command: run start
     ports:
-      - ${PORT}:${PORT}
+      - ${PORT:-8080}:${PORT:-8080}
     develop:
       watch:
         - action: sync+restart
@@ -51,7 +51,24 @@ services:
           target: /usr/src/app/package-lock.json
     volumes:
       - node_modules:/node_modules:cached
-    depends_on: []
+    depends_on:
+      - install
+
+  install:
+    <<: *npm
+    command: install --include=dev
+
+  lint:
+    <<: *npx
+    command: eslint
+    depends_on:
+      - install
+
+  test:
+    <<: *npx
+    command: mocha
+    depends_on:
+      - install
 
 volumes:
   node_modules: {}

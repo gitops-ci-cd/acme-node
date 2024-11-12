@@ -6,7 +6,6 @@ dist
 .cache
 
 # Ignore editor workspace files
-.vscode
 .sublime-*
 .atom
 .editorconfig

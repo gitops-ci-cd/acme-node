@@ -1,0 +1,48 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "docker compose build",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test",
+      "type": "shell",
+      "command": "docker compose run --rm app npm test",  // Adapt to your language and framework
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint",
+      "type": "shell",
+      "command": "docker compose run --rm app npm run lint",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Dev",
+      "type": "shell",
+      "command": "docker compose up",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Migrate",
+      "type": "shell",
+      "command": "docker compose run --rm app npm run migrate",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop Containers",
+      "type": "shell",
+      "command": "docker compose down -v",
+      "problemMatcher": []
+    }
+  ]
+}
