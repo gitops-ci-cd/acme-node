@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Update npm to the latest version.
 RUN npm install -g npm@latest
+RUN npm install --silent
 
 # Copy the source code from the current directory to the working directory inside the container.
 COPY . .

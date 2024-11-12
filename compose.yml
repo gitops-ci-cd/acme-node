@@ -61,14 +61,10 @@ services:
   lint:
     <<: *npx
     command: eslint
-    depends_on:
-      - install
 
   test:
     <<: *npm
     command: run test
-    depends_on:
-      - install
 
 volumes:
   node_modules: {}
