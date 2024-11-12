@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 # Copy the package files and download the dependencies.
 # This is done before installing dependencies or copying code to leverage Docker cache layers.
 COPY package*.json ./
-RUN npm install --silent --include=dev
+RUN npm install --include=dev
 
 # Copy the source code from the current directory to the working directory inside the container.
 COPY . .
