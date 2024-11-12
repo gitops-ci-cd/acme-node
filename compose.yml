@@ -1,0 +1,57 @@
+services:
+  npm: &npm
+    env_file:
+      - path: .env
+        required: false
+    tty: true
+    stdin_open: true
+    build:
+      context: .
+      target: builder
+    entrypoint: npm
+    command: help
+    volumes:
+      - .:/usr/src/app:delegated
+      - node_modules:/node_modules:cached
+
+  npx:
+    <<: *npm
+    entrypoint: npx
+    command: -h
+
+  node:
+    <<: *npm
+    entrypoint: node
+    command: -h
+
+  # We can't use <<: *npm with watch due to the volume overlap.
+  app:
+    env_file:
+      - path: .env
+        required: false
+    tty: true
+    stdin_open: true
+    build:
+      context: .
+      target: builder
+    entrypoint: npm
+    command: run start
+    ports:
+      - ${PORT}:${PORT}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./src/
+          target: /usr/src/app/src/
+        - action: sync+restart
+          path: ./package.json
+          target: /usr/src/app/package.json
+        - action: sync+restart
+          path: ./package-lock.json
+          target: /usr/src/app/package-lock.json
+    volumes:
+      - node_modules:/node_modules:cached
+    depends_on: []
+
+volumes:
+  node_modules: {}

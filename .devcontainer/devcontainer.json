@@ -1,0 +1,14 @@
+{
+  "name": "Application Dev Container",
+  "dockerComposeFile": "../compose.yml",
+  "service": "app",
+  "workspaceFolder": "/usr/src/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+      ]
+    },
+    "settings": {
+    }
+  }
+}

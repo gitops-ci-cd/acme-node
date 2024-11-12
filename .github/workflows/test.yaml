@@ -1,0 +1,16 @@
+on:
+  - pull_request
+
+name: Test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Task
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run Unit Tests
+        run: task test
