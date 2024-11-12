@@ -37,7 +37,7 @@ services:
     entrypoint: npm
     command: run start
     ports:
-      - ${PORT}:${PORT}
+      - ${PORT:-8080}:${PORT:-8080}
     develop:
       watch:
         - action: sync+restart
