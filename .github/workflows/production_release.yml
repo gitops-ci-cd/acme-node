@@ -12,20 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Show GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       - name: Trigger GitHub Deployment
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.PAT }}
           script: |
-            const response = await github.rest.repos.createDeployment({
+            console.log("CONTEXT")
+            console.log(context)
+            let response = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.github.sha,
-              description: 'Deploying to production'
+              description: 'Deploying to production...'
             });
             console.log(`Deployment created with ID: ${response.data.id}`);
+
+            response = await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: response.data.id,
+              state: 'success',
+              environment_url: `https://acme.inc`,
+              description: 'Production environment deployed successfully!',
+            });
