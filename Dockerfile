@@ -6,13 +6,13 @@ WORKDIR /usr/src/app
 # Copy the package files and download the dependencies.
 # This is done before copying the code to leverage Docker cache layers.
 COPY package*.json ./
-
-# Update npm to the latest version.
-RUN npm install -g npm@latest
 RUN npm install --silent --include=dev
 
 # Copy the source code from the current directory to the working directory inside the container.
 COPY . .
+
+# Update npm to the latest version.
+# RUN npm install -g npm@latest
 
 ENTRYPOINT [ "npm" ]
 
