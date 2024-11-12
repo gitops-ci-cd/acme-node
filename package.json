@@ -5,7 +5,6 @@
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
     "start": "node src/server.js",
-    "lint": "eslint .",
     "test": "mocha"
   },
   "author": "brett@dudo.io",

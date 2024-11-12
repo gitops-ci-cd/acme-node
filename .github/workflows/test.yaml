@@ -7,11 +7,5 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Task
-        run: |
-          echo "./bin" >> $GITHUB_PATH
-          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Run Unit Tests
-        run: task test
+      - uses: actions/checkout@v4
+      - run: docker compose run --rm test

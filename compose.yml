@@ -14,7 +14,7 @@ services:
       - .:/usr/src/app:delegated
       - node_modules:/node_modules:cached
 
-  npx:
+  npx: &npx
     <<: *npm
     entrypoint: npx
     command: -h
@@ -24,7 +24,7 @@ services:
     entrypoint: node
     command: -h
 
-  # We can't use <<: *npm with watch due to the volume overlap.
+  # We can't use <<: *npm with develop.watch due to the volume overlap.
   app:
     env_file:
       - path: .env
@@ -52,6 +52,15 @@ services:
     volumes:
       - node_modules:/node_modules:cached
     depends_on: []
+
+  lint:
+    <<: *npx
+    command: eslint
+
+  test:
+    <<: *npm
+    entrypoint: npm
+    command: run test
 
 volumes:
   node_modules: {}
