@@ -35,5 +35,5 @@ jobs:
               repo: context.repo.repo,
               deployment_id: response.data[0].id,
               state: 'inactive',
-              description: 'Tearing down ephemeral environment',
+              description: 'Ephemeral environment terminated.',
             });

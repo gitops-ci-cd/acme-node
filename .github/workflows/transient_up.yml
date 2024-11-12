@@ -29,7 +29,16 @@ jobs:
               ref: context.payload.pull_request.head.ref,
               required_contexts: [],
               environment: 'ephemeral',
-              description: 'Spinning up ephemeral environment',
+              description: 'Spinning up ephemeral environment...',
               transient_environment: true,
             });
             console.log(`Deployment created with ID: ${response.data.id}`);
+
+            response = await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: response.data.id,
+              state: 'success',
+              environment_url: `https://${context.payload.pull_request.head.ref}.acme.inc`,
+              description: 'Ephemeral environment is live!',
+            });
