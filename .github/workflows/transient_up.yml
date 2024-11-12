@@ -22,6 +22,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.payload.pull_request.head.ref,
+              required_contexts: [],
               environment: 'ephemeral',
               description: 'Spinning up ephemeral environment...',
               transient_environment: true,
