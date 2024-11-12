@@ -15,7 +15,7 @@ app.get("/hello", (req, res) => {
 });
 
 // Define a route to simulate an error
-app.get("/boom", (_req, _res, next) => {
+app.get("/bang", (_req, _res, next) => {
   const error = new Error("Test error");
 
   next(error);
