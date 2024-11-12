@@ -18,6 +18,6 @@ jobs:
           context: .
           target: builder
           push: false
-          # cache-from: type=gha
-          # cache-to: type=gha,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - run: docker compose run --rm lint
