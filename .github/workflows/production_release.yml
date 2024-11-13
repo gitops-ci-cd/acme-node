@@ -50,10 +50,9 @@ jobs:
       - name: Tag the version using GitHub CLI
         if: success() && steps.version.outputs.version != ''
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh auth login --with-token <<< "${GITHUB_TOKEN}"
-          gh release create "v${{ env.version }}" --title "Version ${{ env.version }}" --notes "Release version ${{ env.version }}" --target ${{ github.sha }}
+          gh release create "v${{ steps.version.outputs.version }}" --title "Version ${{ steps.version.outputs.version }}" --notes "Release version ${{ steps.version.outputs.version }}" --target ${{ github.sha }}
 
       - name: Trigger GitHub Deployment
         if: success() && steps.version.outputs.version != ''
