@@ -1,0 +1,55 @@
+name: Tag Repository Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  packages: write
+
+jobs:
+  image:
+    name: Build and push Docker image
+    uses: dudo/.github/.github/workflows/docker_image.yml@main
+  tag:
+    name: Tag repoository from version file
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect Version
+        id: version
+        run: |
+          # Check for each language's version file and extract the version
+          if [ -f "package.json" ]; then
+            echo "package.json detected"
+            VERSION=$(jq -r .version package.json)
+          elif [ -f "go.mod" ]; then
+            echo "go.mod detected"
+            VERSION=$(grep -E '^module' go.mod | awk '{print $2}')
+          elif [ -f "setup.py" ]; then
+            echo "setup.py detected"
+            VERSION=$(grep -E 'version=' setup.py | sed "s/.*version=['\"]\([^'\"]*\)['\"].*/\1/")
+          elif [ -f "Gemfile.lock" ]; then
+            echo "Gemfile.lock detected"
+            VERSION=$(grep -E '^[ ]{4}VERSION' Gemfile.lock | awk '{print $2}')
+          elif [ -f "pom.xml" ]; then
+            echo "pom.xml detected"
+            VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
+          elif [ -f "*.csproj" ]; then
+            echo "*.csproj detected"
+            VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" *.csproj)
+          else
+            echo "Error: No version file detected."
+            exit 1
+          fi
+          echo "Version detected: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Tag the version using GitHub CLI
+        if: success() && steps.version.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" --title "Version ${{ steps.version.outputs.version }}" --notes "Release version ${{ steps.version.outputs.version }}" --target ${{ github.sha }}
