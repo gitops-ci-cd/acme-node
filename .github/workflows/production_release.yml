@@ -23,22 +23,28 @@ jobs:
         run: |
           # Check for each language's version file and extract the version
           if [ -f "package.json" ]; then
+            echo "package.json detected"
             VERSION=$(jq -r .version package.json)
           elif [ -f "go.mod" ]; then
+            echo "go.mod detected"
             VERSION=$(grep -E '^module' go.mod | awk '{print $2}')
           elif [ -f "setup.py" ]; then
+            echo "setup.py detected"
             VERSION=$(grep -E 'version=' setup.py | sed "s/.*version=['\"]\([^'\"]*\)['\"].*/\1/")
           elif [ -f "Gemfile.lock" ]; then
+            echo "Gemfile.lock detected"
             VERSION=$(grep -E '^[ ]{4}VERSION' Gemfile.lock | awk '{print $2}')
           elif [ -f "pom.xml" ]; then
+            echo "pom.xml detected"
             VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
           elif [ -f "*.csproj" ]; then
+            echo "*.csproj detected"
             VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" *.csproj)
           else
             echo "Error: No version file detected."
             exit 1
           fi
-
+          echo "Version detected: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Tag the version using GitHub CLI
@@ -59,7 +65,7 @@ jobs:
             let response = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: context.github.sha,
+              ref: context.sha,
               description: 'Deploying to production...'
             });
             console.log(`Deployment created with ID: ${response.data.id}`);
