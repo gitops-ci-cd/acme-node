@@ -72,7 +72,7 @@ Use Docker Compose to start the application and all required services. This has 
 task up
 ```
 
-This command starts the application in development mode, with [hot reloading enabled](https://docs.docker.com/compose/how-tos/file-watch/). Customize the [compose.override.yml](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/) file as needed for additional settings.
+This command starts the application in development mode, with [hot reloading enabled](https://docs.docker.com/compose/how-tos/file-watch/). Customize the [compose.override.yaml](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/) file as needed for additional settings.
 
 ### Testing, Linting, & General Development
 
@@ -94,7 +94,7 @@ To build a docker image, use `build`:
 task build
 ```
 
-`task` will also infer the base command, so you can use `--` (see [Taskfile.yml](./Taskfile.yml) for more details):
+`task` will also infer the base command, so you can use `--` (see [Taskfile.yaml](./Taskfile.yaml) for more details):
 
 ```sh
 task -- install left-pad

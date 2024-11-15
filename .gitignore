@@ -30,7 +30,7 @@ coverage
 # Ignore env
 /.env
 .env.local
-compose.override.yml
+compose.override.yaml
 
 # Ignore brew
 Brewfile.lock.json
