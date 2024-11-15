@@ -22,7 +22,7 @@ services:
   node:
     <<: *npm
     entrypoint: node
-    command: -h
+    command: --help
 
   # We can't use <<: *npm with develop.watch due to the volume overlap.
   app:
