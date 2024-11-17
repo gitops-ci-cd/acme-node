@@ -1,4 +1,4 @@
-name: Ephemeral Environment Workflow
+name: Preview Environment Workflow
 
 on:
   pull_request:
@@ -8,8 +8,8 @@ on:
 
 jobs:
   tear_down_deployment:
-    if: github.event.action == 'closed' || github.event.label.name == 'ephemeral'
-    name: Tear Down Ephemeral Environment
+    if: github.event.action == 'closed' || github.event.label.name == 'preview'
+    name: Tear Down Preview Environment
     runs-on: ubuntu-latest
 
     steps:
@@ -34,5 +34,5 @@ jobs:
               repo: context.repo.repo,
               deployment_id: response.data[0].id,
               state: 'inactive',
-              description: 'Ephemeral environment terminated.',
+              description: 'Preview environment terminated.',
             });

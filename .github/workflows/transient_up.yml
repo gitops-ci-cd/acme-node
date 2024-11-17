@@ -1,4 +1,4 @@
-name: Ephemeral Environment Workflow
+name: Preview Environment Workflow
 
 on:
   pull_request:
@@ -8,8 +8,8 @@ on:
 
 jobs:
   spin_up_deployment:
-    if: github.event.action == 'labeled' && github.event.label.name == 'ephemeral' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'ephemeral')
-    name: Spin Up Ephemeral Environment
+    if: github.event.action == 'labeled' && github.event.label.name == 'preview' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'preview')
+    name: Spin Up Preview Environment
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +23,8 @@ jobs:
               repo: context.repo.repo,
               ref: context.payload.pull_request.head.ref,
               required_contexts: [],
-              environment: 'ephemeral',
-              description: 'Deploying to ephemeral environment...',
+              environment: 'preview',
+              description: 'Deploying to preview environment...',
               transient_environment: true,
             });
             console.log(`Deployment created with ID: ${response.data.id}`);
@@ -35,5 +35,5 @@ jobs:
               deployment_id: response.data.id,
               state: 'success',
               environment_url: `https://${context.payload.pull_request.head.ref}.acme.inc`,
-              description: 'Ephemeral environment deployed successfully!',
+              description: 'Preview environment deployed successfully!',
             });

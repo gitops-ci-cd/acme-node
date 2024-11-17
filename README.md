@@ -20,7 +20,7 @@ Development Workflow
     - PRs facilitate the following actions:
       - Linting checks for code style and formatting
       - Unit Testing ensures code quality and functionality
-      - Ephemeral environment creation for manual testing
+      - Preview environment creation for manual testing
     - Ensure that the latest main is merged into your branch before merging the PR - this can and should be enforced by GitHub.
 1. Merge to main:
     - After review and approval, merge to main.
@@ -112,7 +112,7 @@ This project uses GitHub Actions for CI. See [.github/workflows](./.github/workf
 
 1. Pull Request (PR) Validation
 
-    - Ephemeral Environment Testing
+    - Preview Environment Testing
       - PRs build multiple images for testing, providing isolated environments for validation.
     - Unit Testing and Linting
       - Ensures all code meets quality standards before merging.
