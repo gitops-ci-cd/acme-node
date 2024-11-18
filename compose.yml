@@ -57,6 +57,8 @@ services:
   install:
     <<: *npm
     command: install --include=dev
+    environment:
+      NODE_ENV: development
 
   lint:
     <<: *npx
@@ -67,6 +69,8 @@ services:
   test:
     <<: *npx
     command: mocha
+    environment:
+      NODE_ENV: development
     depends_on:
       - install
 
