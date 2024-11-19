@@ -26,6 +26,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/release@main
         with:
+          token: ${{ github.token }}
           sha: ${{ github.sha }}
       - uses: gitops-ci-cd/.github/actions/build@main
 
