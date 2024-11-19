@@ -18,7 +18,7 @@ jobs:
     if: github.event.action == 'labeled' && github.event.label.name == 'preview' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'preview')
     runs-on: ubuntu-latest
     steps:
-      - uses: checkout@v4
+      - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/build@main
 
   deploy_preview:
