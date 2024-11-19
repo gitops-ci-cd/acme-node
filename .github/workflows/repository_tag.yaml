@@ -18,5 +18,4 @@ name: Tag Repository
 jobs:
   tag:
     uses: gitops-ci-cd/.github/.github/workflows/tag.yaml@main
-    secrets:
-      PAT: ${{ secrets.PAT }}
+    secrets: inherit
