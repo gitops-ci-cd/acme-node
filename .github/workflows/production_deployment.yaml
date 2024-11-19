@@ -10,34 +10,34 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
+  deployments: write
+
 name: Production Deployment
 
 jobs:
   build:
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: gitops-ci-cd/.github/actions/release@main
         with:
           sha: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - uses: gitops-ci-cd/.github/actions/build@main
 
   deploy_production:
-    permissions:
-      deployments: write
     needs: build
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: production
 
   deploy_sandbox:
-    permissions:
-      deployments: write
     needs: build
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
