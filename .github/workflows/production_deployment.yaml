@@ -34,6 +34,6 @@ jobs:
 
   deploy_sandbox:
     needs: build
-    environment: sandbox
-    runs-on: ubuntu-latest
-    steps: []
+    uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
+    with:
+      environment: sandbox
