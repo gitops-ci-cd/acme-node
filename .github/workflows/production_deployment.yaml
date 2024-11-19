@@ -36,3 +36,4 @@ jobs:
     needs: build
     environment: sandbox
     runs-on: ubuntu-latest
+    steps: []
