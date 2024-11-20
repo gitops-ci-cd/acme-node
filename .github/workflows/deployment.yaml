@@ -17,7 +17,7 @@ permissions:
   id-token: write
   deployments: write
 
-name: Production Deployment
+name: Deployment
 
 # We can't use the environment keyword here because it doesn't
 # give us control to show the deployment status as ArgoCD rolls out the changes.
@@ -36,12 +36,8 @@ jobs:
 
   build:
     needs: deploy_sandbox
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gitops-ci-cd/.github/actions/release@main
-        with:
-          sha: ${{ github.sha }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: gitops-ci-cd/.github/actions/build@main
+    uses: gitops-ci-cd/.github/.github/workflows/build.yaml@main
+
+  release:
+    needs: build
+    uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
