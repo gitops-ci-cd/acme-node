@@ -21,12 +21,10 @@ name: Integrate
 
 jobs:
   lint:
-    if: github.event.action != 'labeled'
     name: Integrate
     uses: gitops-ci-cd/.github/.github/workflows/lint.yaml@main
 
   test:
-    if: github.event.action != 'labeled'
     name: Integrate
     uses: gitops-ci-cd/.github/.github/workflows/test.yaml@main
 
