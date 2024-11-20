@@ -19,9 +19,6 @@ permissions:
 
 name: Deployment
 
-# We can't use the environment keyword here because it doesn't
-# give us control to show the deployment status as ArgoCD rolls out the changes.
-# This will still block the next job from running if the production environment has rules set up.
 jobs:
   production:
     name: Production
