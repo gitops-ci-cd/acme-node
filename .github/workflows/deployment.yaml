@@ -23,21 +23,25 @@ name: Deployment
 # give us control to show the deployment status as ArgoCD rolls out the changes.
 # This will still block the next job from running if the production environment has rules set up.
 jobs:
-  deploy_production:
+  production:
+    name: Production
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: production
 
-  deploy_sandbox:
-    needs: deploy_production
+  sandbox:
+    needs: production
+    name: Sandbox
     uses: gitops-ci-cd/.github/.github/workflows/deployment.yaml@main
     with:
       environment: sandbox
 
   build:
-    needs: deploy_sandbox
+    needs: sandbox
+    name: Image
     uses: gitops-ci-cd/.github/.github/workflows/build.yaml@main
 
   release:
     needs: build
+    name: GitHub
     uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
