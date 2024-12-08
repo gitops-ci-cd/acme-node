@@ -14,6 +14,12 @@ app.get("/hello", (req, res) => {
   res.send(`Hello, ${audience}!`);
 });
 
+app.get("/greetings", (req, res) => {
+  const audience = req.query.audience || "World";
+
+  res.send(`Yo, ${audience}!`);
+});
+
 // Define a route to simulate an error
 app.get("/boom", (_req, _res, next) => {
   const error = new Error("Test error");
