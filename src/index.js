@@ -14,7 +14,7 @@ app.get("/hello", (req, res) => {
   res.send(`Hello, ${audience}!`);
 });
 
-app.get("/greetings", (req, res) => {
+app.get("/salutations", (req, res) => {
   const audience = req.query.audience || "World";
 
   res.send(`Yo, ${audience}!`);
