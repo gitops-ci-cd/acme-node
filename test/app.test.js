@@ -1,6 +1,6 @@
 import request from "supertest";
 import { describe, it } from "mocha";
-import app from "../src/index.js";
+import app from "../src/app.js";
 
 describe("GET /hello", () => {
   it("should return Hello, World!", (done) => {

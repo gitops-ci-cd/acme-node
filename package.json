@@ -1,17 +1,19 @@
 {
   "name": "acme-node",
   "type": "module",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node src/index.js",
     "lint": "eslint .",
     "test": "mocha"
   },
   "author": "brett@dudo.io",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.21.1"
+    "@grpc/grpc-js": "^1.12.4",
+    "express": "^4.21.1",
+    "protobufjs": "^7.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",

@@ -30,4 +30,4 @@ EXPOSE 8080
 
 # Define the entry point for the docker image.
 # This is the command that will be run when the container starts.
-CMD [ "src/server.js" ]
+CMD [ "src/index.js" ]
