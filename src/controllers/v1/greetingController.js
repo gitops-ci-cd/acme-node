@@ -1,5 +1,5 @@
-import { fetchGreeting } from "../clients/greetingClient.js";
-import { fetchPerson } from "../clients/personClient.js";
+import { fetchGreeting } from "../../clients/greetingClient.js";
+import { fetchPerson } from "../../clients/personClient.js";
 
 export const greet = async (req, res, next) => {
   try {

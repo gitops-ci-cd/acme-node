@@ -34,6 +34,10 @@ Designed to support local development with **VS Code** and **Docker** and a CI/C
 
     This command starts the application in development mode, with [hot reloading enabled](https://docs.docker.com/compose/how-tos/file-watch/). Customize the [compose.override.yaml](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/) file as needed for additional settings.
 
+1. Visit the Application
+
+    Visit the application in your browser at <http://localhost:8080/api/v1/hello>.
+
 ## Usage
 
 This project uses GitHub Actions for CI. See the following for more details:

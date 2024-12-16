@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 // Primary application routes
-app.use(routes);
+app.use("/api", routes);
 
 // Loop through all middleware
 middleware.forEach((mw) => app.use(mw));

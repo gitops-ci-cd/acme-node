@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { simulateError } from "../controllers/errorController.js";
+import { simulateError } from "../../controllers/v1/errorController.js";
 
 const router = Router();
 

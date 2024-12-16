@@ -1,12 +1,10 @@
 import { Router } from "express";
 
-import greetingRoutes from "./greetingRoutes.js";
-import errorRoutes from "./errorRoutes.js";
+import v1Routes from "./v1/index.js";
 
 const router = Router();
 
-// Mount routes
-router.use(greetingRoutes);
-router.use(errorRoutes);
+// Mount versioned routes
+router.use("/v1", v1Routes);
 
 export default router;
