@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { simulateError } from "../controllers/errorController.js";
 
 const router = Router();
