@@ -16,8 +16,12 @@ const client = new GreetingService(
 
 export const fetchGreeting = async (acceptedLanguages) => {
   return new Promise((resolve, reject) => {
-    const preferredLanguage = acceptedLanguages.find((lang) => !!Language[lang]);
-    const language = Language[preferredLanguage] || Language.UNKNOWN;
+    const languageEnum = Language.type.value.reduce((acc, item) => {
+      acc[item.name] = item.number;
+      return acc;
+    }, {});
+    const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
+    const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
 
     client.Fetch({ language }, (error, response) => {
       if (error) {

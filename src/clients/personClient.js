@@ -24,3 +24,7 @@ export const fetchPerson = async (uuid) => {
     });
   });
 };
+
+// const { default: grpc } = await import("@grpc/grpc-js");
+// const { default: protoLoader } = await import("@grpc/proto-loader");
+// let { protoLoaderOptions } = await import("./src/clients/options.js");
