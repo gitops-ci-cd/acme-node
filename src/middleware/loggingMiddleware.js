@@ -7,11 +7,12 @@ export const loggingHandler = (req, res, next) => {
     const log = {
       timestamp: new Date().toISOString(),
       method: req.method,
+      params: req.query || req.params,
       path: req.originalUrl,
       status: res.statusCode,
       duration: `${duration}ms`,
     };
-    console.log(JSON.stringify(log));
+    console.info(JSON.stringify(log));
   });
 
   // Hook into the response lifecycle to log errors
