@@ -5,7 +5,8 @@ export const greet = async (req, res, next) => {
   try {
     let acceptedLanguages = req.headers["accept-language"]?.split(",") || [];
     acceptedLanguages.map((lang) => lang.split(";")[0].trim().toUpperCase()); // Normalize languages
-    const id = req.params.id;
+
+    const id = req.query.personID || req.params.personID;
 
     const [greetingResponse, personResponse] = await Promise.all([
       fetchGreeting(acceptedLanguages),
@@ -16,7 +17,7 @@ export const greet = async (req, res, next) => {
       data: {
         language: greetingResponse.language,
         greeting: greetingResponse.greeting,
-        person: personResponse.name
+        audience: personResponse.name
       },
     });
   } catch (error) {
