@@ -14,14 +14,15 @@ const client = new GreetingService(
   grpc.credentials.createInsecure()
 );
 
-export const fetchGreeting = async (acceptedLanguages) => {
+export const fetchGreeting = async (_acceptedLanguages) => {
   return new Promise((resolve, reject) => {
-    const languageEnum = Language.type.value.reduce((acc, item) => {
-      acc[item.name] = item.number;
-      return acc;
-    }, {});
-    const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
-    const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
+    // const languageEnum = Language.type.value.reduce((acc, item) => {
+    //   acc[item.name] = item.number;
+    //   return acc;
+    // }, {});
+    // const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
+    // const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
+    const language = Language.UNKNOWN;
 
     client.Fetch({ language }, (error, response) => {
       if (error) {
