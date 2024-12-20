@@ -2,7 +2,7 @@ import express from "express";
 
 import routes from "./routes/index.js";
 import middleware from "./middleware/index.js";
-import terminalMiddleware from "./middleware/terminalMiddleware.js";
+import terminalMiddleware from "./middleware/terminal.js";
 
 
 const app = express();
