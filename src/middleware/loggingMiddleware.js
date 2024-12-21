@@ -7,7 +7,7 @@ export const loggingMiddleware = (req, res, next) => {
     const log = {
       timestamp: new Date().toISOString(),
       method: req.method,
-      path: req.path,
+      path: `${req.baseUrl}${req.path}`,
       params: req.query || req.params,
       status: res.statusCode,
       duration: `${duration}ms`,
@@ -21,7 +21,7 @@ export const loggingMiddleware = (req, res, next) => {
     const log = {
       timestamp: new Date().toISOString(),
       method: req.method,
-      path: req.path,
+      path: `${req.baseUrl}${req.path}`,
       params: req.query || req.params,
       status: res.statusCode,
       duration: `${duration}ms`,
