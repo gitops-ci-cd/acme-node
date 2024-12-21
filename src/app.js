@@ -7,7 +7,6 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-
 // Middleware array, including primary routes
 const stack = [
   express.json(),
