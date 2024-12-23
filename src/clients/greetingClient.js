@@ -15,12 +15,8 @@ const client = new GreetingService(
   grpc.credentials.createInsecure()
 );
 
-// Add metadata
-const metadata = new grpc.Metadata();
-metadata.add("x-feature-branch", "ephemeral-routing");
-
 // Make the call
-export const fetchGreeting = async (acceptedLanguages) => {
+export const fetchGreeting = async (acceptedLanguages, md = {}) => {
   return new Promise((resolve, reject) => {
     const languageEnum = Language.type.value.reduce((acc, item) => {
       acc[item.name] = item.number;
@@ -28,6 +24,12 @@ export const fetchGreeting = async (acceptedLanguages) => {
     }, {});
     const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
     const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
+
+    // Add metadata
+    const metadata = new grpc.Metadata();
+    md.array.forEach((k, v) => {
+      metadata.add(k, v);
+    });
 
     client.Fetch({ language }, metadata, (error, response) => {
       if (error) {

@@ -15,7 +15,6 @@ export const loggingMiddleware = (req, res, next) => {
       status: res.statusCode,
       duration: `${duration}ms`,
     };
-    console.log("headers", JSON.stringify(req.headers));
     console.info(JSON.stringify({ ...base, ...log }));
   });
 
