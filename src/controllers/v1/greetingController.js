@@ -11,7 +11,7 @@ export const greet = async (req, res, next) => {
     const subdomain = req.headers.host.split(".")[0];
 
     const [greetingResponse, personResponse] = await Promise.all([
-      fetchGreeting(acceptedLanguages, { "x-feature-branch": subdomain }),
+      fetchGreeting(acceptedLanguages, { "x-subdomain": subdomain }),
       fetchPerson(id),
     ]);
 
