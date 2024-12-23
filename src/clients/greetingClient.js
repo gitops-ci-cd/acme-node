@@ -9,11 +9,17 @@ const proto = grpc.loadPackageDefinition(packageDefinition);
 const serviceURL = process.env.GREETING_SERVICE_URL;
 const { GreetingService, Language } = proto.com.acme.schema.v1;
 
+// Create a new client
 const client = new GreetingService(
   serviceURL,
   grpc.credentials.createInsecure()
 );
 
+// Add metadata
+const metadata = new grpc.Metadata();
+metadata.add("x-feature-branch", "ephemeral-routing");
+
+// Make the call
 export const fetchGreeting = async (acceptedLanguages) => {
   return new Promise((resolve, reject) => {
     const languageEnum = Language.type.value.reduce((acc, item) => {
@@ -23,7 +29,7 @@ export const fetchGreeting = async (acceptedLanguages) => {
     const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
     const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
 
-    client.Fetch({ language }, (error, response) => {
+    client.Fetch({ language }, metadata, (error, response) => {
       if (error) {
         return reject(error);
       }
