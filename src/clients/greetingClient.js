@@ -16,7 +16,7 @@ const client = new GreetingService(
 );
 
 // Make the call
-export const fetchGreeting = async (acceptedLanguages, md = {}) => {
+export const fetchGreeting = async (acceptedLanguages, extra = {}) => {
   return new Promise((resolve, reject) => {
     const languageEnum = Language.type.value.reduce((acc, item) => {
       acc[item.name] = item.number;
@@ -27,7 +27,7 @@ export const fetchGreeting = async (acceptedLanguages, md = {}) => {
 
     // Add metadata
     const metadata = new grpc.Metadata();
-    md.array.forEach((k, v) => {
+    extra.forEach((k, v) => {
       metadata.add(k, v);
     });
 
