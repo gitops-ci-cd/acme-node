@@ -27,7 +27,7 @@ export const fetchGreeting = async (acceptedLanguages, extra = {}) => {
 
     // Add metadata
     const metadata = new grpc.Metadata();
-    extra.forEach((k, v) => {
+    Object.entries(extra).forEach(([k, v]) => {
       metadata.add(k, v);
     });
 
