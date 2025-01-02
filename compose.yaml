@@ -78,11 +78,13 @@ services:
     image: ghcr.io/gitops-ci-cd/person-service:5321defb239e7c1e0fb8b79f2274b9b754f05a03
     environment:
       - PORT=50051
+      - LOG_LEVEL=DEBUG
 
   greeting-service:
     image: ghcr.io/gitops-ci-cd/greeting-service:d7f87fd4984b2c3c576f5b2b002e8f69afc743f6
     environment:
       - PORT=50051
+      - LOG_LEVEL=DEBUG
 
 volumes:
   node_modules: {}

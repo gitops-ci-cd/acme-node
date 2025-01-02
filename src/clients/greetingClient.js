@@ -1,5 +1,6 @@
 import grpc from "@grpc/grpc-js";
 import protoLoader from "@grpc/proto-loader";
+import { context, propagation } from "@opentelemetry/api";
 
 import { protoLoaderOptions } from "./options.js";
 
@@ -15,6 +16,17 @@ const client = new GreetingService(
 );
 
 export const fetchGreeting = async (acceptedLanguages) => {
+  const currentContext = context.active();
+
+  console.debug("Fetching Greeting");
+
+  const baggage = propagation.getBaggage(currentContext);
+
+  if (baggage) {
+    const entries = baggage.getAllEntries();
+    console.debug("Forwarding Baggage entries:", entries);
+  }
+
   return new Promise((resolve, reject) => {
     const languageEnum = Language.type.value.reduce((acc, item) => {
       acc[item.name] = item.number;

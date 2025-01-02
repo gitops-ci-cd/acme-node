@@ -7,7 +7,7 @@ const levels = {
 
 export const LOG_LEVEL = process.env.LOG_LEVEL || Object.keys(levels)[levels.info];
 
-const currentLevel = levels[LOG_LEVEL.toLowerCase()] || levels.info;
+const currentLevel = parseInt(levels[LOG_LEVEL.toLowerCase()]);
 
 if (currentLevel > levels.debug) {
   console.debug = () => {};
