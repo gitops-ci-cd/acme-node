@@ -1,9 +1,6 @@
 export const loggingMiddleware = (req, res, next) => {
   const start = Date.now();
 
-  // req.headers["baggage"] = "feature=login";
-  // req.headers["traceparent"] = "00-6f8f63e2a67a703e8671429f1f28527e-486ddbb4d69e0303-01";
-
   const base = {
     timestamp: new Date().toISOString(),
     method: req.method,
