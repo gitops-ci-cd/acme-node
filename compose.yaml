@@ -1,5 +1,6 @@
 services:
   npm: &npm
+    profiles: [tasks]
     env_file:
       - path: .env
         required: false
@@ -16,11 +17,13 @@ services:
 
   npx: &npx
     <<: *npm
+    profiles: [tasks]
     entrypoint: npx
     command: -h
 
   node:
     <<: *npm
+    profiles: [tasks]
     entrypoint: node
     command: --help
 
@@ -51,24 +54,35 @@ services:
           target: /usr/src/app/package-lock.json
     volumes:
       - node_modules:/node_modules:cached
-    depends_on:
-      - install
 
   install:
     <<: *npm
+    profiles: [tasks]
     command: install --include=dev
 
   lint:
     <<: *npx
+    profiles: [tasks]
     command: eslint
     depends_on:
       - install
 
   test:
     <<: *npx
+    profiles: [tasks]
     command: mocha
     depends_on:
       - install
+
+  person-service:
+    image: ghcr.io/gitops-ci-cd/person-service:5321defb239e7c1e0fb8b79f2274b9b754f05a03
+    environment:
+      - PORT=50051
+
+  greeting-service:
+    image: ghcr.io/gitops-ci-cd/greeting-service:d7f87fd4984b2c3c576f5b2b002e8f69afc743f6
+    environment:
+      - PORT=50051
 
 volumes:
   node_modules: {}

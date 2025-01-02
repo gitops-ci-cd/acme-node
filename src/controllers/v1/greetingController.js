@@ -1,5 +1,6 @@
 import { fetchGreeting } from "../../clients/greetingClient.js";
 import { fetchPerson } from "../../clients/personClient.js";
+import { makeHTTPRequest } from "../../clients/dummyClient.js";
 
 export const greet = async (req, res, next) => {
   try {
@@ -11,6 +12,7 @@ export const greet = async (req, res, next) => {
     const [greetingResponse, personResponse] = await Promise.all([
       fetchGreeting(acceptedLanguages),
       fetchPerson(id),
+      makeHTTPRequest(),
     ]);
 
     res.status(200).json({

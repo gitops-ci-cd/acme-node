@@ -1,10 +1,10 @@
 {
   "name": "acme-node",
   "type": "module",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node --require ./src/lib/instrumentation.js ./src/index.js",
     "lint": "eslint .",
     "test": "mocha"
   },
@@ -12,6 +12,13 @@
   "license": "MIT",
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.55.0",
+    "@opentelemetry/instrumentation-express": "^0.47.0",
+    "@opentelemetry/instrumentation-grpc": "^0.57.0",
+    "@opentelemetry/instrumentation-http": "^0.57.0",
+    "@opentelemetry/sdk-node": "^0.57.0",
+    "@opentelemetry/sdk-trace-node": "^1.30.0",
     "express": "^4.21.1"
   },
   "devDependencies": {
