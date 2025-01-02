@@ -1,37 +1,3 @@
-// import http from "http";
-// import { propagation } from "@opentelemetry/api";
-
-// export const makeHTTPRequest = async () => {
-//   console.info(propagation.getActiveBaggage());
-
-//   const options = {
-//     hostname: "example.com",
-//     port: 80,
-//     path: "/",
-//     method: "GET",
-//   };
-
-//   // Auto-instrumentation handles context injection automatically
-//   const req = http.request(options, (res) => {
-//     let data = "";
-
-//     res.on("data", (chunk) => {
-//       data += chunk;
-//     });
-
-//     res.on("end", () => {
-//       console.info("Response:", data);
-//     });
-//   });
-
-//   req.on("error", (error) => {
-//     console.error("Error with HTTP request:", error);
-//   });
-
-//   req.end();
-// };
-
-
 import { context, propagation } from "@opentelemetry/api";
 
 export const makeHTTPRequest = async () => {

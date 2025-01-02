@@ -1,5 +1,3 @@
-import { context, propagation } from "@opentelemetry/api";
-
 export const loggingMiddleware = (req, res, next) => {
   const start = Date.now();
 
@@ -9,17 +7,6 @@ export const loggingMiddleware = (req, res, next) => {
     path: `${req.baseUrl}${req.path}`,
     params: req.query || req.params,
   };
-
-  console.info("Headers received:", req.headers);
-
-  const baggage = propagation.getBaggage(
-    propagation.extract(context.active(), req.headers)
-  );
-
-  if (baggage) {
-    const entries = baggage.getAllEntries();
-    console.info("Baggage entries:", entries);
-  }
 
   // Hook into the response lifecycle to log when it finishes
   res.on("finish", () => {

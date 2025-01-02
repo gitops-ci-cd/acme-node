@@ -2,10 +2,9 @@ import express from "express";
 
 import routeHandler from "./routes/index.js";
 import { loggingMiddleware } from "./middleware/loggingMiddleware.js";
-// import { headerExtractorMiddleware } from "./middleware/headerExtractorMiddleware.js";
+import { baggageExtractorMiddleware } from "./middleware/baggageExtractorMiddleware.js";
 import { notFoundHandler } from "./middleware/notFoundHandler.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-// import { headerToBaggageMiddleware } from "./middleware/headerToBaggageMiddleware.js";
 
 const app = express();
 
@@ -13,8 +12,7 @@ const app = express();
 const stack = [
   express.json(),
   loggingMiddleware,
-  // headerExtractorMiddleware,
-  // headerToBaggageMiddleware,
+  baggageExtractorMiddleware,
   routeHandler,
   notFoundHandler,
   errorHandler,
