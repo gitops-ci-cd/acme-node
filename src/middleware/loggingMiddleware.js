@@ -1,4 +1,4 @@
-import { propagation } from "@opentelemetry/api";
+import { context, propagation } from "@opentelemetry/api";
 
 export const loggingMiddleware = (req, res, next) => {
   const start = Date.now();
@@ -10,13 +10,15 @@ export const loggingMiddleware = (req, res, next) => {
     params: req.query || req.params,
   };
 
+  console.info("Headers received:", req.headers);
+
   const baggage = propagation.getBaggage(
-    propagation.extract(propagation.createBaggage(), req.headers)
+    propagation.extract(context.active(), req.headers)
   );
 
   if (baggage) {
     const entries = baggage.getAllEntries();
-    console.log("Baggage entries:", entries);
+    console.info("Baggage entries:", entries);
   }
 
   // Hook into the response lifecycle to log when it finishes

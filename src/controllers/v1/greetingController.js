@@ -4,8 +4,6 @@ import { makeHTTPRequest } from "../../clients/dummyClient.js";
 
 export const greet = async (req, res, next) => {
   try {
-    console.info("Headers received", req.headers);
-
     let acceptedLanguages = req.headers["accept-language"]?.split(",") || [];
     acceptedLanguages = acceptedLanguages.map((lang) => lang.split(";")[0].trim().toUpperCase().replace(/-/g, "_")); // Normalize languages
 
