@@ -22,11 +22,6 @@ export const fetchGreeting = async (acceptedLanguages) => {
 
   const baggage = propagation.getBaggage(currentContext);
 
-  if (baggage) {
-    const entries = baggage.getAllEntries();
-    console.debug("Forwarding Baggage entries:", entries);
-  }
-
   return new Promise((resolve, reject) => {
     const languageEnum = Language.type.value.reduce((acc, item) => {
       acc[item.name] = item.number;
@@ -35,7 +30,15 @@ export const fetchGreeting = async (acceptedLanguages) => {
     const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
     const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
 
-    client.Fetch({ language }, (error, response) => {
+    const metadata = new grpc.Metadata();
+    if (baggage) {
+      const entries = baggage.getAllEntries();
+      console.debug("Forwarding Baggage entries:", entries);
+      entries.forEach(([key, value]) => {
+        metadata.add(key, value.value);
+      });
+    }
+    client.Fetch({ language }, metadata, (error, response) => {
       if (error) {
         return reject(error);
       }
