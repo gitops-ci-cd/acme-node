@@ -34,9 +34,8 @@ export const fetchGreeting = async (acceptedLanguages) => {
     if (baggage) {
       const entries = baggage.getAllEntries();
       console.debug("Forwarding Baggage entries:", entries);
-      entries.forEach(([key, value]) => {
-        metadata.add(key, value.value);
-      });
+      const baggageEntry = entries.map(([key, value]) => `${key}=${value.value}`).join(",");
+      metadata.add("baggage", baggageEntry);
     }
     client.Fetch({ language }, metadata, (error, response) => {
       if (error) {
