@@ -4,6 +4,7 @@ on:
       - opened
       - reopened
       - unlabeled
+      - synchronize
 
 permissions:
   contents: read
