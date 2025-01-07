@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       INCREMENT_LABEL: ""
-      CURRENT_VERSION: "v0.0.0"
+      CURRENT_VERSION: "0.0.0"
       NEW_VERSION: "0.1.0"
       SEMVER_REGEX: '[0-9]*\.[0-9]*\.[0-9]*'
 
@@ -61,7 +61,6 @@ jobs:
           echo "Current Version: $current_version"
       - name: Calculate New Version
         run: |
-          # Extract current version$CURRENT_VERSION
           major=$(echo $CURRENT_VERSION | cut -d'.' -f1)
           minor=$(echo $CURRENT_VERSION | cut -d'.' -f2)
           patch=$(echo $CURRENT_VERSION | cut -d'.' -f3)
@@ -73,7 +72,7 @@ jobs:
           esac
 
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
-          echo "New Version: v$new_version"
+          echo "New Version: $new_version"
       - name: Check for JavaScript
         if: hashFiles('package.json') != ''
         run: |
