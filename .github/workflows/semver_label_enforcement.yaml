@@ -23,6 +23,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Check for "major" Label
         if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
@@ -116,4 +118,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Bump version to ${{ env.new_version }}"
-          git push origin ${{ github.event.pull_request.head.ref }}
+          git push -u origin HEAD
