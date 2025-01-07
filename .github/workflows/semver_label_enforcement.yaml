@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       INCREMENT_LABEL: ""
-      CURRENT_VERSION: v0.0.0
-      NEW_VERSION: v0.1.0
+      CURRENT_VERSION: "v0.0.0"
+      NEW_VERSION: "0.1.0"
       SEMVER_REGEX: '[0-9]*\.[0-9]*\.[0-9]*'
 
     steps:
@@ -45,25 +45,26 @@ jobs:
           increment_label=minor
           echo "INCREMENT_LABEL=$increment_label" >> $GITHUB_ENV
           echo "No valid label found. Adding '$increment_label'."
-          gh pr edit ${{ github.event.pull_request.number }} --add-label $increment_label
+          gh pr edit $PR_NUMBER --add-label $increment_label
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Determine Current Version
         run: |
           git fetch --tags
           current_version=$(git tag --list "v[0-9]*" --sort=-v:refname | head -n 1)
           if [ -n "$current_version" ]; then
+            current_version=${current_version#v}
             echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
           fi
           echo "Current Version: $current_version"
       - name: Calculate New Version
         run: |
-          # Extract current version
-          version=${CURRENT_VERSION#v}
-          major=$(echo $version | cut -d'.' -f1)
-          minor=$(echo $version | cut -d'.' -f2)
-          patch=$(echo $version | cut -d'.' -f3)
+          # Extract current version$CURRENT_VERSION
+          major=$(echo $CURRENT_VERSION | cut -d'.' -f1)
+          minor=$(echo $CURRENT_VERSION | cut -d'.' -f2)
+          patch=$(echo $CURRENT_VERSION | cut -d'.' -f3)
 
           case "$INCREMENT_LABEL" in
             major) new_version="$((major + 1)).0.0";;
