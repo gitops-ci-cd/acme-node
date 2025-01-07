@@ -4,7 +4,6 @@ on:
       - opened
       - reopened
       - unlabeled
-      - synchronize
 
 permissions:
   contents: write
