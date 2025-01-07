@@ -44,7 +44,7 @@ jobs:
         run: |
           echo "INCREMENT_LABEL=minor" >> $GITHUB_ENV
           echo "No valid label found. Adding '$INCREMENT_LABEL'."
-          gh pr edit ${{ github.event.pull_request.number }} --add-label ${{ env.INCREMENT_LABEL }}
+          gh pr edit ${{ github.event.pull_request.number }} --add-label $INCREMENT_LABEL
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,6 +55,7 @@ jobs:
           if [ -n "$current_version" ]; then
             echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
           fi
+          echo "Current Version: $current_version"
       - name: Calculate New Version
         run: |
           # Extract current version
@@ -64,62 +65,63 @@ jobs:
           patch=$(echo $version | cut -d'.' -f3)
 
           # Determine the bump type
-          case "${{ env.INCREMENT_LABEL }}" in
+          case "$INCREMENT_LABEL" in
             major) new_version="$((major + 1)).0.0";;
             minor) new_version="$major.$((minor + 1)).0";;
             patch) new_version="$major.$minor.$((patch + 1))";;
           esac
 
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+          echo "New Version: $new_version"
       - name: Check for JavaScript
         if: hashFiles('package.json') != ''
         run: |
-          echo "JavaScript detected."
+          echo "JavaScript detected..."
           sed -i "s/\"version\": \"$SEMVER_REGEX\"/\"version\": \"$NEW_VERSION\"/" package.json
           echo "Updated package.json"
       - name: Check for .NET
         if: hashFiles('*.csproj') != ''
         run: |
-          echo ".NET detected."
+          echo ".NET detected..."
           for csproj in *.csproj; do
             [ -e "$csproj" ] || continue
-            sed -i.bak 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' "$csproj"
+            sed -i 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' "$csproj"
             echo "Updated $csproj"
           done
       - name: Check for .NET
         if: hashFiles('Directory.Build.props') != ''
         run: |
-          echo ".NET detected."
-          sed -i.bak 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' Directory.Build.props
+          echo ".NET detected..."
+          sed -i 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' Directory.Build.props
           echo "Updated Directory.Build.props"
       - name: Check for Python
         if: hashFiles('setup.py') != ''
         run: |
-          echo "Python detected."
-          sed -i.bak "s/version='$SEMVER_REGEX'/version='$NEW_VERSION'/" setup.py
+          echo "Python detected..."
+          sed -i "s/version='$SEMVER_REGEX'/version='$NEW_VERSION'/" setup.py
           echo "Updated setup.py"
       - name: Check for Python
         if: hashFiles('pyproject.toml') != ''
         run: |
-          echo "Python detected."
-          sed -i.bak 's/^version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' pyproject.toml
+          echo "Python detected..."
+          sed -i 's/^version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' pyproject.toml
           echo "Updated pyproject.toml"
       - name: Check for Java
         if: hashFiles('build.gradle') != ''
         run: |
-          echo "Java detected."
-          sed -i.bak 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle
+          echo "Java detected..."
+          sed -i 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle
           echo "Updated build.gradle"
       - name: Check for Kotlin
         if: hashFiles('build.gradle.kts') != ''
         run: |
-          echo "Kotlin detected."
-          sed -i.bak 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle.kts
+          echo "Kotlin detected..."
+          sed -i 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle.kts
           echo "Updated build.gradle.kts"
       - name: Commit and Push Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Bump version to ${{ env.NEW_VERSION }}"
+          git commit -m "Bump version to $NEW_VERSION"
           git push -u origin HEAD
