@@ -1,7 +1,7 @@
 {
   "name": "acme-node",
   "type": "module",
-  "version": "0.6.1",
+  "version": "v0.7.0",
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
     "start": "node ./src/index.js",
