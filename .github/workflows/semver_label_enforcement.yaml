@@ -76,7 +76,7 @@ jobs:
         if: hashFiles('package.json') != ''
         run: |
           echo "JavaScript detected."
-          jq '.version = "${NEW_VERSION}"' package.json > tmp.json && mv tmp.json package.json
+          sed -i "s/\"version\": \"${SEMVER_REGEX}\"/\"version\": \"${NEW_VERSION}\"/" package.json
           echo "Updated package.json"
       - name: Check for .NET
         if: hashFiles('*.csproj') != ''
