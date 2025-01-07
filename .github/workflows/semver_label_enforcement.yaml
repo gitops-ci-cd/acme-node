@@ -1,25 +1,54 @@
 on:
   pull_request:
     types:
-      - labeled
+      - opened
+      - reopened
+      - unlabeled
+      - synchronize
 
 permissions:
   contents: read
   pull-requests: write
 
-name: Label
+name: SemVer Label Enforcement
 
 jobs:
   label:
     runs-on: ubuntu-latest
-    if: contains(fromJSON('["major", "minor", "patch"]'), github.event.label.name)
     env:
+      VALID_LABEL_FOUND: "false"
       CURRENT_VERSION: v0.0.0
       NEW_VERSION: v0.1.0
       SEMVER_REGEX: '[0-9]*\.[0-9]*\.[0-9]*'
 
     steps:
       - uses: actions/checkout@v4
+      - name: Check for "major" Label
+        if: contains(github.event.pull_request.labels.*.name, 'major')
+        run: |
+          echo "Found 'major' label."
+          echo "VALID_LABEL_FOUND=true" >> $GITHUB_ENV
+
+      - name: Check for "minor" Label
+        if: contains(github.event.pull_request.labels.*.name, 'minor')
+        run: |
+          echo "Found 'minor' label."
+          echo "VALID_LABEL_FOUND=true" >> $GITHUB_ENV
+
+      - name: Check for "patch" Label
+        if: contains(github.event.pull_request.labels.*.name, 'patch')
+        run: |
+          echo "Found 'patch' label."
+          echo "VALID_LABEL_FOUND=true" >> $GITHUB_ENV
+
+      - name: Add "minor" Label (Default)
+        if: env.VALID_LABEL_FOUND == 'false'
+        run: |
+          echo "No valid label found. Adding 'minor'."
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "minor"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Fetch Tags and Determine Current Version
         run: |
           git fetch --tags
