@@ -59,7 +59,7 @@ jobs:
       - name: Calculate New Version
         run: |
           # Extract current version
-          version=${{ env.CURRENT_VERSION }}
+          version=${{ env.CURRENT_VERSION }}#v
           major=$(echo $version | cut -d'.' -f1)
           minor=$(echo $version | cut -d'.' -f2)
           patch=$(echo $version | cut -d'.' -f3)
