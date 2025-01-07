@@ -41,6 +41,8 @@ services:
     command: run start
     ports:
       - ${PORT:-8080}:${PORT:-8080}
+    environment:
+      - NODE_OPTIONS=--import @opentelemetry/auto-instrumentations-node/register --experimental-loader=@opentelemetry/instrumentation/hook.mjs
     develop:
       watch:
         - action: sync+restart
