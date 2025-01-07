@@ -16,7 +16,7 @@ jobs:
   label:
     runs-on: ubuntu-latest
     env:
-      VALID_LABEL_FOUND: "false"
+      INCREMENT_LABEL: ""
       CURRENT_VERSION: v0.0.0
       NEW_VERSION: v0.1.0
       SEMVER_REGEX: '[0-9]*\.[0-9]*\.[0-9]*'
@@ -25,29 +25,27 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-      - name: Check for "major" Label
-        if: contains(github.event.pull_request.labels.*.name, 'major')
-        run: |
-          echo "Found 'major' label."
-          echo "VALID_LABEL_FOUND=true" >> $GITHUB_ENV
-
-      - name: Check for "minor" Label
-        if: contains(github.event.pull_request.labels.*.name, 'minor')
-        run: |
-          echo "Found 'minor' label."
-          echo "VALID_LABEL_FOUND=true" >> $GITHUB_ENV
-
       - name: Check for "patch" Label
         if: contains(github.event.pull_request.labels.*.name, 'patch')
         run: |
           echo "Found 'patch' label."
-          echo "VALID_LABEL_FOUND=true" >> $GITHUB_ENV
-
-      - name: Add "minor" Label (Default)
-        if: env.VALID_LABEL_FOUND == 'false'
+          echo "INCREMENT_LABEL=patch" >> $GITHUB_ENV
+      - name: Check for "minor" Label
+        if: contains(github.event.pull_request.labels.*.name, 'minor')
         run: |
-          echo "No valid label found. Adding 'minor'."
-          gh pr edit ${{ github.event.pull_request.number }} --add-label "minor"
+          echo "Found 'minor' label."
+          echo "INCREMENT_LABEL=minor" >> $GITHUB_ENV
+      - name: Check for "major" Label
+        if: contains(github.event.pull_request.labels.*.name, 'major')
+        run: |
+          echo "Found 'major' label."
+          echo "INCREMENT_LABEL=major" >> $GITHUB_ENV
+      - name: Add default Label
+        if: env.INCREMENT_LABEL == ''
+        run: |
+          echo "INCREMENT_LABEL=minor" >> $GITHUB_ENV
+          echo "No valid label found. Adding '$INCREMENT_LABEL'."
+          gh pr edit ${{ github.event.pull_request.number }} --add-label ${{ env.INCREMENT_LABEL }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -67,19 +65,21 @@ jobs:
           patch=$(echo $version | cut -d'.' -f3)
 
           # Determine the bump type
-          case "${{ github.event.label.name }}" in
+          case "${{ env.INCREMENT_LABEL }}" in
             major) new_version="v$((major + 1)).0.0";;
             minor) new_version="v$major.$((minor + 1)).0";;
             patch) new_version="v$major.$minor.$((patch + 1))";;
           esac
 
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
-      - if: hashFiles('package.json') != ''
+      - name: Check for JavaScript
+        if: hashFiles('package.json') != ''
         run: |
           echo "JavaScript detected."
-          sed -i "s/\"version\": \"${SEMVER_REGEX}\"/\"version\": \"${NEW_VERSION}\"/" package.json
+          jq '.version = "${NEW_VERSION}"' package.json > tmp.json && mv tmp.json package.json
           echo "Updated package.json"
-      - if: hashFiles('*.csproj') != ''
+      - name: Check for .NET
+        if: hashFiles('*.csproj') != ''
         run: |
           echo ".NET detected."
           for csproj in *.csproj; do
@@ -87,27 +87,32 @@ jobs:
             sed -i.bak 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' "$csproj"
             echo "Updated $csproj"
           done
-      - if: hashFiles('Directory.Build.props') != ''
+      - name: Check for .NET
+        if: hashFiles('Directory.Build.props') != ''
         run: |
           echo ".NET detected."
           sed -i.bak 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' Directory.Build.props
           echo "Updated Directory.Build.props"
-      - if: hashFiles('setup.py') != ''
+      - name: Check for Python
+        if: hashFiles('setup.py') != ''
         run: |
           echo "Python detected."
           sed -i.bak "s/version='$SEMVER_REGEX'/version='$NEW_VERSION'/" setup.py
           echo "Updated setup.py"
-      - if: hashFiles('pyproject.toml') != ''
+      - name: Check for Python
+        if: hashFiles('pyproject.toml') != ''
         run: |
           echo "Python detected."
           sed -i.bak 's/^version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' pyproject.toml
           echo "Updated pyproject.toml"
-      - if: hashFiles('build.gradle') != ''
+      - name: Check for Java
+        if: hashFiles('build.gradle') != ''
         run: |
           echo "Java detected."
           sed -i.bak 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle
           echo "Updated build.gradle"
-      - if: hashFiles('build.gradle.kts') != ''
+      - name: Check for Kotlin
+        if: hashFiles('build.gradle.kts') != ''
         run: |
           echo "Kotlin detected."
           sed -i.bak 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle.kts
