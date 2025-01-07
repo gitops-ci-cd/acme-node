@@ -66,9 +66,9 @@ jobs:
 
           # Determine the bump type
           case "${{ env.INCREMENT_LABEL }}" in
-            major) new_version="v$((major + 1)).0.0";;
-            minor) new_version="v$major.$((minor + 1)).0";;
-            patch) new_version="v$major.$minor.$((patch + 1))";;
+            major) new_version="$((major + 1)).0.0";;
+            minor) new_version="$major.$((minor + 1)).0";;
+            patch) new_version="$major.$minor.$((patch + 1))";;
           esac
 
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
