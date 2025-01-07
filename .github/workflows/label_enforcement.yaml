@@ -18,6 +18,7 @@ jobs:
       VALID_LABEL_FOUND: "false"
 
     steps:
+      - uses: actions/checkout@v4
       - name: Check for "major" Label
         if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
