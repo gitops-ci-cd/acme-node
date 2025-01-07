@@ -1,8 +1,8 @@
 import grpc from "@grpc/grpc-js";
 import protoLoader from "@grpc/proto-loader";
+import { promisify } from "util";
 
 import { protoLoaderOptions } from "./options.js";
-import { metadataInterceptor } from "../middleware/metadataInterceptor.js";
 
 const protoPath = "./proto/com/acme/schema/v1/greeting.proto";
 const packageDefinition = protoLoader.loadSync(protoPath, protoLoaderOptions);
@@ -13,25 +13,16 @@ const { GreetingService, Language } = proto.com.acme.schema.v1;
 const client = new GreetingService(
   serviceURL,
   grpc.credentials.createInsecure(),
-  {
-    interceptors: [metadataInterceptor],
-  }
 );
 
-export const fetchGreeting = async (acceptedLanguages) => {
-  return new Promise((resolve, reject) => {
-    const languageEnum = Language.type.value.reduce((acc, item) => {
-      acc[item.name] = item.number;
-      return acc;
-    }, {});
-    const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
-    const language = languageEnum[preferredLanguage] || Language.UNKNOWN;
+export const detectLanguage = (acceptedLanguages) => {
+  const languageEnum = Language.type.value.reduce((acc, item) => {
+    acc[item.name] = item.number;
+    return acc;
+  }, {});
+  const preferredLanguage = acceptedLanguages.find((lang) => !!languageEnum[lang]);
 
-    client.Fetch({ language }, (error, response) => {
-      if (error) {
-        return reject(error);
-      }
-      resolve(response);
-    });
-  });
+  return languageEnum[preferredLanguage] || Language.UNKNOWN;
 };
+
+export const fetchGreetingAsync = promisify(client.Fetch).bind(client);
