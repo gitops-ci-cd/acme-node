@@ -15,8 +15,8 @@ export const greet = async (req, res, next) => {
     // Use context.with() to ensure the trace context is propagated
     const [greetingResponse, personResponse] = await context.with(activeContext, () =>
       Promise.all([
-        fetchGreetingAsync({language}),
-        fetchPersonAsync({uuid}),
+        fetchGreetingAsync({ language }),
+        fetchPersonAsync({ uuid }),
       ])
     );
 
