@@ -77,7 +77,7 @@ jobs:
       - if: hashFiles('package.json') != ''
         run: |
           echo "JavaScript detected."
-          sed -i.bak 's/"version": "$SEMVER_REGEX"/"version": "'$NEW_VERSION'"/' package.json
+          sed -i "s/\"version\": \"${SEMVER_REGEX}\"/\"version\": \"${NEW_VERSION}\"/" package.json
           echo "Updated package.json"
       - if: hashFiles('*.csproj') != ''
         run: |
