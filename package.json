@@ -4,7 +4,7 @@
   "version": "0.6.1",
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
-    "start": "node --require @opentelemetry/auto-instrumentations-node/register ./src/index.js",
+    "start": "node ./src/index.js",
     "lint": "eslint .",
     "test": "mocha"
   },
