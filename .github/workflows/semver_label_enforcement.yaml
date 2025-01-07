@@ -42,9 +42,10 @@ jobs:
       - name: Add default Label
         if: env.INCREMENT_LABEL == ''
         run: |
-          echo "INCREMENT_LABEL=minor" >> $GITHUB_ENV
-          echo "No valid label found. Adding '$INCREMENT_LABEL'."
-          gh pr edit ${{ github.event.pull_request.number }} --add-label $INCREMENT_LABEL
+          increment_label=minor
+          echo "INCREMENT_LABEL=$increment_label" >> $GITHUB_ENV
+          echo "No valid label found. Adding '$increment_label'."
+          gh pr edit ${{ github.event.pull_request.number }} --add-label $increment_label
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
