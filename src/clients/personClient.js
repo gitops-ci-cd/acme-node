@@ -15,4 +15,4 @@ const client = new PersonService(
   grpc.credentials.createInsecure(),
 );
 
-export const fetchPersonAsync = promisify(client.Fetch).bind(client)
+export const fetchPersonAsync = promisify(client.Fetch).bind(client);
