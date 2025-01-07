@@ -1,0 +1,90 @@
+on:
+  pull_request:
+    types:
+      - labeled
+
+permissions:
+  contents: read
+  pull-requests: write
+
+name: Label
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON('["major", "minor", "patch"]'), github.event.label.name)
+    env:
+      CURRENT_VERSION: v0.0.0
+      NEW_VERSION: v0.1.0
+      SEMVER_REGEX: '[0-9]*\.[0-9]*\.[0-9]*'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch Tags and Determine Current Version
+        run: |
+          git fetch --tags
+          current_version=$(git tag --list "v[0-9]*" --sort=-v:refname | head -n 1)
+          if [ -n "$current_version" ]; then
+            echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
+          fi
+      - name: Calculate New Version
+        run: |
+          # Extract current version
+          version=${{ env.CURRENT_VERSION }}
+          major=$(echo $version | cut -d'.' -f1)
+          minor=$(echo $version | cut -d'.' -f2)
+          patch=$(echo $version | cut -d'.' -f3)
+
+          # Determine the bump type
+          case "${{ github.event.label.name }}" in
+            major) new_version="v$((major + 1)).0.0";;
+            minor) new_version="v$major.$((minor + 1)).0";;
+            patch) new_version="v$major.$minor.$((patch + 1))";;
+          esac
+
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+      - if: hashFiles('package.json') != ''
+        run: |
+          echo "JavaScript detected."
+          sed -i.bak 's/"version": "$SEMVER_REGEX"/"version": "'$NEW_VERSION'"/' package.json
+          echo "Updated package.json"
+      - if: hashFiles('*.csproj') != ''
+        run: |
+          echo ".NET detected."
+          for csproj in *.csproj; do
+            [ -e "$csproj" ] || continue
+            sed -i.bak 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' "$csproj"
+            echo "Updated $csproj"
+          done
+      - if: hashFiles('Directory.Build.props') != ''
+        run: |
+          echo ".NET detected."
+          sed -i.bak 's|<Version>$SEMVER_REGEX</Version>|<Version>'$NEW_VERSION'</Version>|' Directory.Build.props
+          echo "Updated Directory.Build.props"
+      - if: hashFiles('setup.py') != ''
+        run: |
+          echo "Python detected."
+          sed -i.bak "s/version='$SEMVER_REGEX'/version='$NEW_VERSION'/" setup.py
+          echo "Updated setup.py"
+      - if: hashFiles('pyproject.toml') != ''
+        run: |
+          echo "Python detected."
+          sed -i.bak 's/^version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' pyproject.toml
+          echo "Updated pyproject.toml"
+      - if: hashFiles('build.gradle') != ''
+        run: |
+          echo "Java detected."
+          sed -i.bak 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle
+          echo "Updated build.gradle"
+      - if: hashFiles('build.gradle.kts') != ''
+        run: |
+          echo "Kotlin detected."
+          sed -i.bak 's/version = "$SEMVER_REGEX"/version = "'$NEW_VERSION'"/' build.gradle.kts
+          echo "Updated build.gradle.kts"
+      - name: Commit and Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Bump version to ${{ env.new_version }}"
+          git push origin ${{ github.event.pull_request.head.ref }}

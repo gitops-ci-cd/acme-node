@@ -1,0 +1,55 @@
+name: Detect Current Version
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  detect-version:
+    runs-on: ubuntu-latest
+    env:
+      SEMVER_REGEX: '[0-9]*\.[0-9]*\.[0-9]*'
+      DETECTED_VERSION: v0.0.0
+
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('package.json') != ''
+        run: |
+          echo "JavaScript detected."
+          echo "DETECTED_VERSION=v$(grep -oP '"version": "\K'"$SEMVER_REGEX package.json)" >> $GITHUB_ENV
+      - if: hashFiles('*.csproj') != ''
+        run: |
+          echo ".NET detected."
+          for csproj in *.csproj; do
+            [ -e "$csproj" ] || continue
+            echo "DETECTED_VERSION=v$(grep -oP '<Version>\K'"$SEMVER_REGEX" "$csproj")" >> $GITHUB_ENV
+          done
+      - if: hashFiles('Directory.Build.props') != ''
+        run: |
+          echo ".NET detected."
+          echo "DETECTED_VERSION=v$(grep -oP '<Version>\K'"$SEMVER_REGEX" Directory.Build.props)" >> $GITHUB_ENV
+      - if: hashFiles('setup.py') != ''
+        run: |
+          echo "Python detected."
+          echo "DETECTED_VERSION=v$(grep -oP "version='\K'"$SEMVER_REGEX" setup.py)" >> $GITHUB_ENV
+      - if: hashFiles('pyproject.toml') != ''
+        run: |
+          echo "Python detected."
+          echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"$SEMVER_REGEX" pyproject.toml)" >> $GITHUB_ENV
+      - if: hashFiles('build.gradle') != ''
+        run: |
+          echo "Java detected."
+          echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"$SEMVER_REGEX" build.gradle)" >> $GITHUB_ENV
+      - if: hashFiles('build.gradle.kts') != ''
+        run: |
+          echo "Kotlin detected."
+          echo "DETECTED_VERSION=v$(grep -oP 'version = "\K'"$SEMVER_REGEX" build.gradle.kts)" >> $GITHUB_ENV
+      - name: Output Detected Version
+        run: |
+          if [ -n "$DETECTED_VERSION" ]; then
+            echo "Detected Version: $DETECTED_VERSION"
+          else
+            echo "No version detected."
+          fi
