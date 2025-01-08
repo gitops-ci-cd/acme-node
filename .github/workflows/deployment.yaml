@@ -37,4 +37,4 @@ jobs:
   release:
     needs: build
     name: Release
-    uses: ./.github/workflows/release.yaml
+    uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
