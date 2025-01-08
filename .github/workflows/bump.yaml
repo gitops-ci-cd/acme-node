@@ -14,4 +14,4 @@ name: Bump
 jobs:
   bump:
     name: Bump
-    uses: gitops-ci-cd/.github/.github/workflows/version_bump.yaml@main
+    uses: gitops-ci-cd/.github/.github/workflows/bump.yaml@main
