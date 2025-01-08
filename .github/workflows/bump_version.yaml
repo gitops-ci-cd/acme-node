@@ -1,0 +1,17 @@
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - unlabeled
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Bump Version
+
+jobs:
+  bump:
+    name: Bump
+    uses: gitops-ci-cd/.github/.github/workflows/bump_version.yaml@main
