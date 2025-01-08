@@ -9,9 +9,9 @@ permissions:
   contents: write
   pull-requests: write
 
-name: Bump Version
+name: Version Bump
 
 jobs:
   bump:
     name: Bump
-    uses: gitops-ci-cd/.github/.github/workflows/bump_version.yaml@main
+    uses: gitops-ci-cd/.github/.github/workflows/version_bump.yaml@main
