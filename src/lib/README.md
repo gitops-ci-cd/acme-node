@@ -4,7 +4,7 @@ Some common libraries that are used in the project.
 
 - log.js
 
-   This configures the logger to listen for a LOG_LEVEL environment variable.
+    This configures the logger to listen for a LOG_LEVEL environment variable.
 
 - OpenTelemetry
 
