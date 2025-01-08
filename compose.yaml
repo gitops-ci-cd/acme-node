@@ -57,6 +57,17 @@ services:
     volumes:
       - node_modules:/node_modules:cached
 
+  jaeger:
+    image: jaegertracing/jaeger:latest
+    ports:
+      - 16686:16686 # UI http://localhost:16686/
+      - 4317:4317
+      - 4318:4318
+      - 5778:5778
+      - 9411:9411
+    environment:
+      - LOG_LEVEL=debug
+
   install:
     <<: *npm
     profiles: [tasks]
