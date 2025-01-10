@@ -13,3 +13,7 @@ Some common libraries that are used in the project.
 - Jaeger
 
     A collector is set up for local development so that you can see traces in the Jaeger UI. The collector is configured to listen on port 14268. The Jaeger UI is available at <http://localhost:16686>.
+
+- Dummy
+
+    Making a change to trigger CI.
