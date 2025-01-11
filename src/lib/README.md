@@ -16,4 +16,4 @@ Some common libraries that are used in the project.
 
 - Dummy
 
-    Making a change to trigger CI.
+    Making a change to trigger CI!
