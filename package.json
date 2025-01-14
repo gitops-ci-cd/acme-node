@@ -1,7 +1,7 @@
 {
   "name": "acme-node",
   "type": "module",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
     "start": "node ./src/index.js",
@@ -14,6 +14,7 @@
     "@grpc/grpc-js": "^1.12.4",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.55.0",
+    "@types/express-serve-static-core": "^5.0.3",
     "express": "^4.21.1"
   },
   "devDependencies": {
