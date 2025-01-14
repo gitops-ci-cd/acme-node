@@ -41,6 +41,8 @@ services:
     command: run start
     ports:
       - ${PORT:-8080}:${PORT:-8080}
+    environment:
+      - NODE_OPTIONS=--import @opentelemetry/auto-instrumentations-node/register --experimental-loader=@opentelemetry/instrumentation/hook.mjs
     develop:
       watch:
         - action: sync+restart
@@ -54,6 +56,17 @@ services:
           target: /usr/src/app/package-lock.json
     volumes:
       - node_modules:/node_modules:cached
+
+  jaeger:
+    image: jaegertracing/jaeger:latest
+    ports:
+      - 16686:16686 # UI http://localhost:16686/
+      - 4317:4317
+      - 4318:4318
+      - 5778:5778
+      - 9411:9411
+    environment:
+      - LOG_LEVEL=debug
 
   install:
     <<: *npm

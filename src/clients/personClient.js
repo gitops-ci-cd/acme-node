@@ -1,5 +1,6 @@
 import grpc from "@grpc/grpc-js";
 import protoLoader from "@grpc/proto-loader";
+import { promisify } from "util";
 
 import { protoLoaderOptions } from "./options.js";
 import { metadataInterceptor } from "../middleware/metadataInterceptor.js";
@@ -18,13 +19,4 @@ const client = new PersonService(
   }
 );
 
-export const fetchPerson = async (uuid) => {
-  return new Promise((resolve, reject) => {
-    client.Fetch({ uuid }, (error, response) => {
-      if (error) {
-        return reject(error);
-      }
-      resolve(response);
-    });
-  });
-};
+export const fetchPersonAsync = promisify(client.Fetch).bind(client);
