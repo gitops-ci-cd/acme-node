@@ -81,9 +81,9 @@ services:
       - install
 
   test:
-    <<: *npx
+    <<: *npm
     profiles: [tasks]
-    command: mocha
+    command: run test
     depends_on:
       - install
 

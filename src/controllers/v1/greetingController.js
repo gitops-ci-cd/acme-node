@@ -14,11 +14,21 @@ export const greet = async (req, res, next) => {
       fetchPersonAsync({ uuid }),
     ]);
 
+    let defaultAudience;
+
+    if (/^ES/.test(language)) {
+      defaultAudience = "Mundo";
+    } else if (/^FR/.test(language)) {
+      defaultAudience = "Monde";
+    } else {
+      defaultAudience = "World";
+    }
+
     res.status(200).json({
       data: {
         language: greetingResponse.language,
         greeting: greetingResponse.greeting,
-        audience: personResponse.name
+        audience: personResponse.name || defaultAudience,
       },
     });
   } catch (error) {
