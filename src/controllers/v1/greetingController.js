@@ -16,15 +16,12 @@ export const greet = async (req, res, next) => {
 
     let defaultAudience;
 
-    switch (language) {
-      case "ES":
-        defaultAudience = "Mundo";
-        break;
-      case "FR":
-        defaultAudience = "Monde";
-        break;
-      default:
-        defaultAudience = "World";
+    if (/^ES/.test(language)) {
+      defaultAudience = "Mundo";
+    } else if (/^FR/.test(language)) {
+      defaultAudience = "Monde";
+    } else {
+      defaultAudience = "World";
     }
 
     res.status(200).json({
