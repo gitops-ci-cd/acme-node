@@ -11,14 +11,14 @@
   "author": "brett@dudo.io",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "^1.12.4",
+    "@grpc/grpc-js": "^1.13.0",
     "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/auto-instrumentations-node": "^0.56.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.56.1",
     "express": "^4.21.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
-    "eslint": "^9.20.1",
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
     "globals": "^15.15.0"
   }
 }
