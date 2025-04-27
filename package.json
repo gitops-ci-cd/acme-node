@@ -1,7 +1,7 @@
 {
   "name": "acme-node",
   "type": "module",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Sample Application with developer friendly boilerplate",
   "scripts": {
     "start": "node ./src/index.js",
@@ -19,6 +19,6 @@
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "eslint": "^9.20.1",
-    "globals": "^15.15.0"
+    "globals": "^16.0.0"
   }
 }
