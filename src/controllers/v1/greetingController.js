@@ -21,7 +21,7 @@ export const greet = async (req, res, next) => {
     } else if (/^FR/.test(language)) {
       defaultAudience = "Monde";
     } else {
-      defaultAudience = "World";
+      defaultAudience = "HelloWorld123123";
     }
 
     res.status(200).json({

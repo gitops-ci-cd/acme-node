@@ -25,16 +25,16 @@ jobs:
     strategy:
       matrix:
         target: [sandbox]
-    uses: gitops-ci-cd/.github/.github/workflows/deploy.yaml@main
+    uses: Lephuocthanh2000/.github/.github/workflows/deploy.yaml@main
     with:
       environment: ${{ matrix.target }}
 
   build:
     needs: deploy
     name: Build
-    uses: gitops-ci-cd/.github/.github/workflows/build.yaml@main
+    uses: Lephuocthanh2000/.github/.github/workflows/build.yaml@main
 
   release:
     needs: build
     name: Release
-    uses: gitops-ci-cd/.github/.github/workflows/release.yaml@main
+    uses: Lephuocthanh2000/.github/.github/workflows/release.yaml@main
