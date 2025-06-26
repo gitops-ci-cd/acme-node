@@ -18,5 +18,5 @@ const stack = [
 
 // Attach each middleware in the stack to the app
 stack.forEach((middleware) => app.use(middleware));
-
+console.log("hello123");
 export default app;
