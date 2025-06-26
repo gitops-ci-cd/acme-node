@@ -12,7 +12,7 @@ name: Deployment Status
 jobs:
   sync:
     name: Sync
-    uses: Gitops-ziichat/.github/.github/workflows/sync_deployment.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/sync_deployment.yaml@main
     with:
       ref: ${{ github.event.client_payload.ref }}
       state: ${{ github.event.client_payload.state }}

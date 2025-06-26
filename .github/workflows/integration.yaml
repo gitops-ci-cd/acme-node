@@ -26,28 +26,28 @@ name: Integration
 jobs:
   lint:
     name: Integrate
-    uses: Gitops-ziichat/.github/.github/workflows/lint.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/lint.yaml@main
 
   test:
     name: Integrate
-    uses: Gitops-ziichat/.github/.github/workflows/test.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/test.yaml@main
 
   bump:
     name: Integrate
-    uses: Gitops-ziichat/.github/.github/workflows/bump.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/bump.yaml@main
 
   auto-merge:
     name: Check auto-merge
-    uses: Gitops-ziichat/.github/.github/workflows/auto_merge.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/auto_merge.yaml@main
 
   deploy:
     if: github.event.action == 'labeled' && github.event.label.name == 'preview' || github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'preview')
     name: Deploy
-    uses: Gitops-ziichat/.github/.github/workflows/deploy.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/deploy.yaml@main
     with:
       environment: preview
 
   build:
     needs: deploy
     name: Build
-    uses: Gitops-ziichat/.github/.github/workflows/build.yaml@main
+    uses: gitops-ziichat/.github/.github/workflows/build.yaml@main
